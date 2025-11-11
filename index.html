@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>UnFi — Perfect UnFi Bootloader</title>
+
+<link rel="icon" type="image/png" href="UnFi.png">
+<link rel="apple-touch-icon" href="UnFi.png">
+<meta name="theme-color" content="#7b5cff">
+
+<meta name="title" content="UnFi — Universal Secure Bootloader for Arduino, Raspberry Pi, ESP32, ESP8266, Phone, PC">
+<meta name="description" content="UnFi is a blazing-fast secure bootloader built for Arduino, Raspberry Pi, ESP32, ESP8266, Phone, and PC. Ultra-light, cryptographically verified, production-ready. Fast. Safe. Universal.">
+
+<meta name="keywords" content="UnFi, bootloader, secure bootloader, Arduino bootloader, Raspberry Pi bootloader, ESP32 secure boot, STM32 bootloader, microcontroller firmware, hardware security, embedded systems, fast boot, microcontroller startup, verified boot, maker tools, open hardware, IoT security">
+
+<meta name="author" content="Sliz®">
+<meta name="theme-color" content="#7b5cff">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://unfi.pp.ua/">
+<meta property="og:title" content="UnFi — Universal Secure Bootloader">
+<meta property="og:description" content="Secure. Universal. Lightning-Fast. UnFi is the bootloader for Arduino, Raspberry Pi, ESP32, ESP8266, Phone, and PC.">
+<meta property="og:image" content="https://unfi.pp.ua/UnFi.png">
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://unfi.pp.ua/">
+<meta property="twitter:title" content="UnFi — Universal Secure Bootloader">
+<meta property="twitter:description" content="A new era of hardware booting — fast, verified and universal.">
+<meta property="twitter:image" content="https://unfi.pp.ua/UnFi.png">
+
+<meta name="robots" content="index, follow">
+<meta name="revisit-after" content="3 days">
+<meta name="distribution" content="global">
+<meta name="rating" content="safe for kids (but like, real dev kids)">
+<meta http-equiv="content-language" content="en">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link rel="icon" href="https://unfi.pp.ua/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="https://unfi.pp.ua/UnFi.png">
+
+<meta itemprop="name" content="UnFi Secure Bootloader">
+<meta itemprop="description" content="Ultra-fast secure bootloader for Arduino, Raspberry Pi, ESP32, ESP8266, Phone, and PC.">
+<meta itemprop="image" content="https://unfi.pp.ua/UnFi.png">
+
+<style>
+  :root{
+    --bg:#0b0f1a;
+    --card:#0f1724;
+    --accent1:#7b5cff;
+    --accent2:#00e0a1;
+    --glass: rgba(255,255,255,0.04);
+    --muted: rgba(255,255,255,0.6);
+    --white: #ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(123,92,255,0.08), transparent),
+                radial-gradient(1000px 500px at 90% 90%, rgba(0,224,161,0.04), transparent),
+                var(--bg);
+    color:var(--white);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:40px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+  }
+
+  .wrap{
+    width:100%;
+    max-width:1100px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:20px;
+    padding:36px;
+    box-shadow: 0 8px 40px rgba(3,6,12,0.6);
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.03);
+  }
+
+  .brand {
+    position:absolute;
+    top:18px;
+    left:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    color:var(--white);
+  }
+  .brand img{
+    width:28px;
+    height:28px;
+    display:block;
+    border-radius:6px;
+    background:linear-gradient(135deg,var(--accent1),var(--accent2));
+    box-shadow:0 2px 8px rgba(0,0,0,0.6), inset 0 -2px 6px rgba(255,255,255,0.06);
+  }
+  .brand .name{
+    font-weight:700;
+    letter-spacing:0.6px;
+    font-size:14px;
+    opacity:0.95;
+  }
+
+  .hero{
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap:30px;
+    align-items:center;
+    min-height:420px;
+  }
+
+  .left{
+    padding:12px 0;
+  }
+  h1{
+    font-size:46px;
+    line-height:1.03;
+    margin-bottom:8px;
+    letter-spacing:-0.5px;
+  }
+  .accent-line{
+    display:block;
+    font-weight:800;
+    font-size:18px;
+    color:var(--muted);
+    margin-bottom:18px;
+  }
+
+  .shiny {
+    background: linear-gradient(90deg, #fff 0%, #ffd9ff 20%, #b5d3ff 40%, #fff 60%, #aaffd5 80%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 3s linear infinite;
+    display:inline-block;
+    font-weight:800;
+  }
+  @keyframes shimmer {
+    0%{ background-position: 0% 50%;}
+    50%{ background-position: 100% 50%;}
+    100%{ background-position: 0% 50%;}
+  }
+
+  .title-row{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    margin-top:10px;
+  }
+  .static-text{ color:var(--muted); font-weight:600;}
+  .rotator{
+    position:relative;
+    width:260px;
+    height:46px;
+    overflow:visible;
+  }
+  .rotator .item{
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    transform: translateY(100%) scale(0.95);
+    opacity:0;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    padding-left:6px;
+    font-weight:800;
+    font-size:20px;
+    line-height:1;
+    pointer-events:none;
+  }
+
+  .rotator .pop-in{
+    animation: popCycle 6s linear infinite;
+  }
+  .rotator .item .chip{
+    padding:6px 10px;
+    border-radius:8px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 6px 20px rgba(11,15,26,0.6);
+  }
+  .rotator .item .device-name{
+    font-weight:900;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    background-image: linear-gradient(90deg, var(--accent1), var(--accent2));
+    text-shadow: 0 6px 30px rgba(123,92,255,0.08);
+  }
+
+  @keyframes popCycle{
+    0%{ transform: translateY(100%) scale(0.95); opacity:0; filter:blur(6px);}
+    8%{ transform: translateY(0%) scale(1.03); opacity:1; filter:blur(0);}
+    18%{ transform: translateY(-6px) scale(1); opacity:1; }
+    30%{ transform: translateY(0px) scale(0.99); opacity:1; }
+    40%{ transform: translateY(-2px) scale(0.995); opacity:1; }
+    48%{ opacity:0.95; }
+    60%{ transform: translateY(-40px) scale(0.95); opacity:0;}
+    100%{ transform: translateY(100%) scale(0.9); opacity:0;}
+  }
+
+  .right{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:14px;
+    padding:22px;
+    border:1px solid rgba(255,255,255,0.03);
+    min-height:260px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    justify-content:center;
+  }
+  .right h3{ font-size:18px; margin-bottom:6px;}
+  .pill{
+    display:inline-flex;
+    gap:8px;
+    align-items:center;
+    padding:8px 12px;
+    border-radius:999px;
+    background:linear-gradient(90deg, rgba(123,92,255,0.12), rgba(0,224,161,0.06));
+    font-weight:700;
+    width:max-content;
+  }
+
+  .features{ display:grid; gap:10px; margin-top:6px;}
+  .feat{ display:flex; gap:12px; align-items:flex-start;}
+  .dot{
+    width:10px; height:10px; border-radius:3px;
+    background:linear-gradient(135deg,var(--accent1),var(--accent2));
+    box-shadow:0 4px 18px rgba(0,0,0,0.6);
+    margin-top:6px;
+  }
+  .feat p{ font-size:14px; color:var(--muted); line-height:1.3; }
+
+  .cta-row{ display:flex; gap:12px; margin-top:18px; align-items:center;}
+  .btn {
+    padding:12px 16px;
+    border-radius:12px;
+    font-weight:800;
+    cursor:pointer;
+    border: none;
+    background: linear-gradient(90deg,var(--accent1),var(--accent2));
+    color: #081018;
+    box-shadow: 0 8px 30px rgba(123,92,255,0.12), 0 4px 10px rgba(0,0,0,0.5);
+  }
+  .ghost {
+    background:transparent;
+    color:var(--white);
+    border:1px solid rgba(255,255,255,0.06);
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:700;
+  }
+
+  .modal {
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg, rgba(2,4,8,0.6), rgba(2,4,8,0.8));
+    z-index:1200;
+    padding:30px;
+  }
+  .modal.show{ display:flex; }
+  .modal-card{
+    width:100%;
+    max-width:920px;
+    background: #071021;
+    border-radius:12px;
+    padding:18px;
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow:0 20px 80px rgba(0,0,0,0.6);
+  }
+  pre {
+    max-height:520px;
+    overflow:auto;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:8px;
+    padding:14px;
+    color:#d7f8f0;
+    font-size:12.5px;
+    line-height:1.45;
+    border:1px solid rgba(255,255,255,0.03);
+  }
+
+  .footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:22px;
+    border-top:1px dashed rgba(255,255,255,0.03);
+    padding-top:18px;
+    color:var(--muted);
+    font-size:13px;
+  }
+
+  @media (max-width:980px){
+    .hero{ grid-template-columns: 1fr; }
+    .right{ order:-1; }
+    h1{ font-size:34px; }
+    .rotator{ width:100%; }
+  }
+
+</style>
+</head>
+<body>
+  <div class="wrap" role="main" aria-labelledby="main-heading">
+    <a class="brand" href="https://unfi.pp.ua" target="_blank" rel="noopener noreferrer" title="Open UnFi site">
+      <img src="UnFi.png" alt="UnFi" style="width:20px; height:20px; border-radius:4px; object-fit:contain;">
+      <span class="name">UnFi</span>
+    </a>
+
+    <div class="hero">
+      <div class="left">
+        <span class="accent-line">Your Perfect</span>
+        <h1 id="main-heading">
+          <span class="shiny">UnFi</span>
+          <br>
+          Bootloader for
+        </h1>
+
+        <div class="title-row" aria-hidden="false">
+          <div class="static-text">fast, secure &amp; universal —</div>
+          <div class="rotator" aria-live="polite" aria-atomic="true">
+            <div class="item pop-in" style="animation-delay:0s">
+              <div class="chip"><span class="device-name">Arduino</span></div>
+            </div>
+            <div class="item pop-in" style="animation-delay:1.8s">
+              <div class="chip"><span class="device-name">Raspberry Pi</span></div>
+            </div>
+            <div class="item pop-in" style="animation-delay:3.6s">
+              <div class="chip"><span class="device-name">ESP32</span></div>
+            </div>
+            <div class="item pop-in" style="animation-delay:5.4s">
+              <div class="chip"><span class="device-name">ESP8266</span></div>
+            </div>
+            <div class="item pop-in" style="animation-delay:7.2s">
+              <div class="chip"><span class="device-name">Custom Boards</span></div>
+            </div>
+            <div class="item pop-in" style="animation-delay:7.2s">
+              <div class="chip"><span class="device-name">Phone</span></div>
+            </div>
+            <div class="item pop-in" style="animation-delay:7.2s">
+              <div class="chip"><span class="device-name">PC</span></div>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top:18px; color:var(--muted); max-width:70%;">
+          UnFi boots your devices fast, safely and with style. Minimal flash footprint, verified secure handoff and a simple dev flow to flash, rollback and audit. Think of it as the cinematic startup sequence for your hardware.
+        </p>
+
+        <div class="cta-row">
+          <button class="btn" id="getCodeBtn">Get the code</button>
+          <button class="ghost" id="learnBtn">What's inside?</button>
+        </div>
+
+        <div style="margin-top:14px; color:var(--muted); font-size:13px;">
+          Built for tinkerers, makers and production engineers. No React, no bloat — just a tiny secure boot shim.
+        </div>
+      </div>
+
+      <aside class="right" aria-label="Quick features">
+        <div class="pill">UnFi • Tiny Secure Boot</div>
+        <h3>Why UnFi?</h3>
+        <div class="features">
+          <div class="feat">
+            <div class="dot"></div>
+            <p><strong>Lightning boot:</strong> optimized startup path that halves boot time on many platforms.</p>
+          </div>
+          <div class="feat">
+            <div class="dot"></div>
+            <p><strong>Verified chain:</strong> cryptographically verify images with simple keys you control.</p>
+          </div>
+          <div class="feat">
+            <div class="dot"></div>
+            <p><strong>Cross-platform:</strong> reference implementations for Arduino, Raspberry, ESP32, ESP8266, Phone and PC's!</p>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:12px;">
+          <button class="btn" id="downloadBin">Download binary</button>
+          <button class="ghost" id="openSite" onclick="window.open('https://github.com/SlizR/UnFi','_blank')">Visit Repo</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">
+      <div>Made with ⚡ and care — UnFi team</div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <a href="https://unfi.pp.ua" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:var(--muted)">
+          <small>unfi.pp.ua</small>
+        </a>
+        <small style="color:var(--muted)">v0.1</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <h3 id="modal-title">Get UnFi — quick starter</h3>
+        <button class="ghost" id="closeModal">Close</button>
+      </div>
+      <p style="color:var(--muted); margin-bottom:10px;">
+        Copy this starter and adapt to your target. This is a minimal example showing how UnFi hands off to a verified payload — real production code will require platform-specific glue and key provisioning.
+      </p>
+
+      <pre id="codeBlock">
+
+#include "unfi.h"
+int main(void){
+  // init minimal hw
+  hw_init();
+  // verify payload signature
+  if(unfi_verify_image("payload.bin", key_store_get_active())){
+    // quick integrity & boot
+    unfi_boot("payload.bin");
+  } else {
+    // fallback to recovery or safe-mode
+    recovery_mode();
+  }
+  while(1) { /* should never get here */ }
+}
+      </pre>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+        <button class="btn" id="copyBtn">Copy snippet</button>
+        <a class="btn" id="fullRepo" href="https://github.com/SlizR/UnFi" target="_blank" rel="noopener noreferrer">Open repo / site</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="unfi-footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo">
+        <img src="UnFi.png" alt="UnFi" style="width:20px; height:20px; border-radius:4px; object-fit:contain;">
+        <span>UnFi Bootloader</span>
+      </div>
+      <p>Universal secure boot environment for Arduino, Raspberry, ESP32, ESP8266, Phones & PC.</p>
+    </div>
+
+    <div class="footer-links">
+      <a href="https://unfi.pp.ua" target="_blank">Website</a>
+      <a href="https://github.com/SlizR/UnFi/wiki" target="_blank">Docs</a>
+      <a href="https://github.com/SlizR/UnFi" target="_blank">Git Repo</a>
+      <a href="#modal" target="_blank">Download</a>
+    </div>
+
+    <div class="footer-right">
+      <p>v0.1</p>
+      <p>Made for Sliz®</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function setupRotator(){
+    const items = Array.from(document.querySelectorAll('.rotator .item'));
+    const cycle = 6.0;
+    items.forEach((el, idx) => {
+      const delay = (cycle / items.length) * idx * -1;
+      el.style.animationDelay = delay + 's';
+      el.style.animationDuration = cycle + 's';
+    });
+  })();
+
+  const modal = document.getElementById('modal');
+  document.getElementById('getCodeBtn').addEventListener('click', ()=> {
+    modal.classList.add('show');
+  });
+  document.getElementById('learnBtn').addEventListener('click', ()=> {
+    modal.classList.add('show');
+  });
+  document.getElementById('closeModal').addEventListener('click', ()=> {
+    modal.classList.remove('show');
+  });
+  modal.addEventListener('click', (e)=>{
+    if(e.target === modal) modal.classList.remove('show');
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async ()=>{
+    const code = document.getElementById('codeBlock').innerText;
+    try {
+      await navigator.clipboard.writeText(code);
+      document.getElementById('copyBtn').innerText = 'Copied!';
+      setTimeout(()=> document.getElementById('copyBtn').innerText = 'Copy snippet', 2000);
+    } catch(e){
+      alert('Could not copy — your browser blocked clipboard. You can select & copy manually.');
+    }
+  });
+
+  document.getElementById('downloadBin').addEventListener('click', ()=>{
+    const blob = new Blob(["UnFi placeholder binary\nVersion: 0.9-alpha\n"], {type:'application/octet-stream'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'unfi-stub.bin';
+    document.body.appendChild(a); a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  (function announceRotator(){
+    const rotator = document.querySelector('.rotator');
+    const items = Array.from(rotator.querySelectorAll('.device-name')).map(el => el.textContent);
+    let idx = 0;
+    const live = document.createElement('div');
+    live.setAttribute('aria-live','polite');
+    live.setAttribute('aria-atomic','true');
+    live.style.position='absolute';
+    live.style.left='-10000px';
+    live.style.width='1px';
+    live.style.height='1px';
+    live.style.overflow='hidden';
+    document.body.appendChild(live);
+    function tick(){
+      live.textContent = items[idx % items.length] + ' boot target';
+      idx++;
+      setTimeout(tick, 1800);
+    }
+    tick();
+  })();
+</script>
+
+</body>
+</html>
