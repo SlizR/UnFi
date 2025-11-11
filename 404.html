@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UnFi • 404 — Lost in Bootloader</title>
+
+<link rel="icon" type="image/png" href="UnFi.png">
+<link rel="apple-touch-icon" href="UnFi.png">
+<meta name="theme-color" content="#7b5cff">
+  
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body {
+    margin:0;
+    background: #0a0f18;
+    font-family: Consolas, Menlo, "JetBrains Mono", monospace;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    overflow:hidden;
+    color:#fff;
+  }
+
+  .noise {
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==") repeat;
+    opacity:.05;
+  }
+
+  .scanline {
+    position:fixed;
+    inset:0;
+    background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.03) 3%, transparent 6%);
+    background-size:100% 6px;
+    mix-blend-mode:overlay;
+    animation: scan 3s linear infinite;
+  }
+  @keyframes scan {
+    0% {transform: translateY(-100%);}
+    100% {transform: translateY(100%);}
+  }
+
+  .box {
+    text-align:center;
+    padding:40px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.03);
+    backdrop-filter: blur(8px);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 0 40px rgba(123,92,255,0.25);
+    max-width:500px;
+  }
+
+  .big {
+    font-size:110px;
+    font-weight:900;
+    letter-spacing:-2px;
+    background:linear-gradient(90deg, #7b5cff, #00e0a1);
+    -webkit-background-clip:text;
+    color:transparent;
+    animation: pulse 2.4s infinite alternate ease-in-out;
+  }
+  @keyframes pulse {
+    0% {filter:drop-shadow(0 0 16px rgba(123,92,255,.3));}
+    100% {filter:drop-shadow(0 0 26px rgba(0,224,161,.35));}
+  }
+
+  .text {
+    font-size:16px;
+    margin-top:8px;
+    opacity:.75;
+  }
+
+  .btn {
+    margin-top:28px;
+    display:inline-flex;
+    padding:12px 18px;
+    background:linear-gradient(90deg, #7b5cff, #00e0a1);
+    border:none;
+    border-radius:10px;
+    font-weight:800;
+    cursor:pointer;
+    color:#081018;
+    text-decoration:none;
+    transition:.25s;
+    box-shadow:0 6px 20px rgba(0,0,0,.4);
+  }
+  .btn:hover {
+    filter:brightness(1.2);
+    transform:translateY(-2px);
+  }
+
+  .mini {
+    margin-top:10px;
+    opacity:.4;
+    font-size:13px;
+  }
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="scanline"></div>
+
+<div class="box">
+  <div class="big">404</div>
+  <div class="text">You slipped out of the boot chain, traveler.</div>
+  <div class="text">This route is not mapped in UnFi.</div>
+
+  <a href="https://unfi.pp.ua" class="btn">Return to Boot Sequence</a>
+  <div class="mini">Error Code: UNFI-OUT-OF-ADDRESS-404</div>
+</div>
+
+</body>
+</html>
