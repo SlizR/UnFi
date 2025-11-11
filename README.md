@@ -11,8 +11,8 @@
 
 ## Getting Started ⚡
 1. Download or clone the repository  
-2. Add `UnFi` to your project  
-3. Enjoy instant booting for your devices  
+2. Open `UnFi` and search the arduino, raspberry pi and more, and download the version
+3. Enjoy instant booting for your devices and more. 
 
 ## Website 🎬
 Check out [UnFi Website](https://unfi.pp.ua) and see it in action!  
