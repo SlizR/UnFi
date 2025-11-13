@@ -15,7 +15,10 @@
 3. Enjoy instant booting for your devices and more. 
 
 ## Website 🎬
-Check out [UnFi Website](https://unfi.pp.ua) and see it in action!  
+Check out [UnFi Website](https://unfi.pp.ua) and see it in action! 
+
+## Wiki 🎫
+Check out the [wiki](https://github.com/SlizR/UnFi/wiki) and learn how to download and select a code for your device, information, examples, and errors.
 
 ## Contributing 🤝
 We welcome contributions! If you want to improve **UnFi**, open an issue or submit a pull request.  
