@@ -11,7 +11,7 @@
 
 ## Getting Started ⚡
 1. Download or clone the repository  
-2. Open `UnFi` and search the arduino, raspberry pi and more, and download the version
+2. Open `UnFi` and search the arduino, esp32 and more, and download the version
 3. Enjoy instant booting for your devices and more. 
 
 ## Website 🎬
