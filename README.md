@@ -1,4 +1,4 @@
-![UnFi Gif](Assets/UnFi.gif)
+![UnFi Photo](UnFi.png)
 
 # UnFi 🚀
 
