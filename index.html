@@ -352,6 +352,22 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        #unfiLogo {
+  background: linear-gradient(90deg, #00f0ff, #ff00ff, #00ff9d, #00f0ff);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: unfiGradient 5s linear infinite;
+  cursor: default;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+@keyframes unfiGradient {
+  0% { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
     </style>
 </head>
 <body>
@@ -363,15 +379,17 @@
     </header>
 
     <section class="hero">
-        <h1 class="hero-title">Your Perfect UnFi Bootloader for</h1>
-        <div class="rotating-text-container">
-            <div class="rotating-text" id="rotatingText">Arduino</div>
-        </div>
-        <p class="hero-subtitle">Fast, Secure, Universal - Boot Your Systems in Milliseconds</p>
-        <button class="cta-button" onclick="document.getElementById('get-started').scrollIntoView({behavior: 'smooth'})">
-            Get Started Now
-        </button>
-    </section>
+  <h1 class="hero-title">
+    Your Perfect <span id="unfiLogo">UnFi</span> Bootloader for
+  </h1>
+  <div class="rotating-text-container">
+    <div class="rotating-text" id="rotatingText">Arduino</div>
+  </div>
+  <p class="hero-subtitle">Fast, Secure, Universal - Boot Your Systems in Milliseconds</p>
+  <button class="cta-button" onclick="document.getElementById('get-started').scrollIntoView({behavior: 'smooth'})">
+    Get Started Now
+  </button>
+</section>
 
     <section class="features">
         <div class="features-container">
@@ -530,5 +548,342 @@ make flash</pre>
             });
         });
     </script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const egg = params.get('est-egg');
+if (egg !== null) {
+
+const style = document.createElement('style');
+style.textContent = `
+  .egg-overlay{
+    position:fixed; inset:0; background:radial-gradient(circle at 20% 10%, rgba(0,128,255,0.06), transparent 8%), rgba(2,6,23,0.95);
+    color:#bfe7ff; font-family: "SFMono-Regular",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    z-index:99999; display:flex; justify-content:center; align-items:center; padding:20px;
+  }
+  .egg-window{ width:900px; max-width:95%; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.8); overflow:hidden; border:1px solid rgba(255,255,255,0.03) }
+  .egg-header{ background:linear-gradient(90deg,#071026,#07263a); padding:10px 16px; display:flex; align-items:center; gap:12px; }
+  .led{ width:10px; height:10px; border-radius:50%; background:#2b6; box-shadow:0 0 6px rgba(43,204,102,0.25) }
+  .title{ font-weight:700; font-size:14px; color:#dff7ff }
+  .egg-body{ display:flex; gap:0; }
+  .panel{ padding:18px; width:50%; min-height:360px; box-sizing:border-box; background:linear-gradient(180deg, rgba(10,20,30,0.6), rgba(0,0,0,0.45)); }
+  .left{ border-right:1px dashed rgba(255,255,255,0.03); }
+  .terminal{ background:#000; color:#7fffd4; padding:12px; height:220px; overflow:auto; border-radius:6px; font-size:13px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5) }
+  .hint{ margin-top:10px; color:#9fd; font-size:13px }
+  .controls{ margin-top:12px; display:flex; gap:8px; flex-wrap:wrap }
+  .btn{ background:linear-gradient(180deg,#0b3a55,#07283a); padding:8px 12px; border-radius:8px; cursor:pointer; border:1px solid rgba(255,255,255,0.04); color:#cfe; user-select:none }
+  .btn:active{ transform:translateY(1px) }
+  .small{ font-size:12px; padding:6px 8px }
+  .switch-row{ display:flex; gap:8px; margin-top:14px; justify-content:center }
+  .switch{ width:36px; height:20px; background:#222; border-radius:4px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:1px solid rgba(255,255,255,0.03) }
+  .switch.on{ background:linear-gradient(90deg,#2b6,#0b6); color:#012 }
+  .memory-grid{ display:grid; grid-template-columns:repeat(8,1fr); gap:6px; margin-top:12px }
+  .mem-cell{ background:#08121a; padding:10px; border-radius:4px; text-align:center; cursor:pointer; user-select:none; border:1px solid rgba(255,255,255,0.02) }
+  .mem-cell.correct{ outline:2px solid rgba(43,204,102,0.18) }
+  .badge{ margin-top:14px; padding:10px; border-radius:8px; background:linear-gradient(90deg,#071026,#0a2b36); text-align:center; font-weight:700 }
+  .close-x{ margin-left:auto; cursor:pointer; color:#89f; font-weight:700 }
+  .footer{ padding:8px 12px; font-size:12px; color:#9eb; display:flex; gap:8px; align-items:center; }
+  .flash{ animation:flash 1s linear; }
+  @keyframes flash{ 0%{filter:brightness(1)}50%{filter:brightness(1.6)}100%{filter:brightness(1)} }
+`;
+document.head.appendChild(style);
+
+const overlay = document.createElement('div');
+overlay.className = 'egg-overlay';
+overlay.innerHTML = `
+  <div class="egg-window" role="dialog" aria-modal="true">
+    <div class="egg-header">
+      <div class="led" id="bios-led"></div>
+      <div class="title">EST-BOOT / Bootloader playground</div>
+      <div style="opacity:0.6;margin-left:8px;font-size:12px">v0.9 — secret mode</div>
+      <div class="close-x btn small" id="egg-close">✕</div>
+    </div>
+    <div class="egg-body">
+      <div class="panel left">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div style="font-weight:700">SYSTEM TERMINAL</div>
+          <div style="margin-left:auto;font-size:12px;color:#89f" id="term-status">idle</div>
+        </div>
+        <div class="terminal" id="terminal" aria-live="polite"></div>
+        <div class="hint">Complete 3 challenges and collect the Loading Core 🛠️</div>
+        <div class="controls">
+          <div class="btn small" id="start-seq">Start test</div>
+          <div class="btn small" id="reset-progress">Reset progress</div>
+        </div>
+        <div class="badge" id="progress-badge">Progress: 0 / 3</div>
+      </div>
+      <div class="panel right">
+        <div style="font-weight:700">BOOT CHALLENGES</div>
+        <div style="margin-top:10px">
+          <div style="font-weight:600">1) MEMORY PING</div>
+          <div class="memory-grid" id="mem-grid"></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div style="font-weight:600">2) DIP SWITCHES</div>
+          <div class="switch-row" id="switch-row"></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div style="font-weight:600">3) BOOT SEQUENCE</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:8px;">
+            <div id="boot-seq-display" style="background:#001218;padding:10px;border-radius:6px;min-width:160px"></div>
+            <input id="boot-input" placeholder="введи seq" style="background:#06121a;border-radius:6px;padding:8px;border:1px solid rgba(255,255,255,0.03);color:#9ff;font-family:inherit" />
+            <div class="btn small" id="check-boot">Проверить</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div style="font-weight:600">SYSTEM LOG</div>
+          <div style="font-size:12px;color:#9fb;margin-top:6px">Секреты: <span style="opacity:0.8">bootloader-theme 🌌</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+document.body.appendChild(overlay);
+
+const terminal = overlay.querySelector('#terminal');
+const led = overlay.querySelector('#bios-led');
+const termStatus = overlay.querySelector('#term-status');
+const progressBadge = overlay.querySelector('#progress-badge');
+
+function logTerminal(text, tone='info') {
+  const p = document.createElement('div');
+  p.textContent = text;
+  p.className = tone==='err' ? 'flash' : '';
+  terminal.appendChild(p);
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+overlay.querySelector('#egg-close').addEventListener('click', () => {
+  document.body.removeChild(overlay);
+});
+
+let ledTimer = setInterval(()=> {
+  led.style.opacity = (led.style.opacity==1?0.35:1);
+}, 700);
+
+const KEY = 'est_egg_boot_progress_v1';
+let progress = JSON.parse(localStorage.getItem(KEY) || '{"mem":false,"switch":false,"boot":false}');
+function saveProgress(){ localStorage.setItem(KEY, JSON.stringify(progress)); updateBadge(); }
+function resetProgress(){ progress = {mem:false,switch:false,boot:false}; saveProgress(); terminal.innerHTML=''; logTerminal('Прогресс сброшен.'); }
+
+function updateBadge(){
+  const v = [progress.mem, progress.switch, progress.boot].filter(Boolean).length;
+  progressBadge.textContent = `Progress: ${v} / 3`;
+  if(v===3) {
+    progressBadge.style.background = 'linear-gradient(90deg,#073a0b,#123a1f)';
+    progressBadge.textContent = 'CORE UNLOCKED — BOOT READY ✨';
+    termStatus.textContent = 'core ready';
+    logTerminal('>>> CORE UNLOCKED. Bootloader engaged. 🎉');
+  }
+}
+updateBadge();
+
+// Reset button
+overlay.querySelector('#reset-progress').addEventListener('click', ()=>{ resetProgress(); });
+
+const memGrid = overlay.querySelector('#mem-grid');
+let memAnswer = [];
+function setupMemory(){
+  memGrid.innerHTML = '';
+  memAnswer = [];
+  const total = 16, alive = 4;
+  const aliveIndices = new Set();
+  while(aliveIndices.size<alive){ aliveIndices.add(Math.floor(Math.random()*total)) }
+  for(let i=0;i<total;i++){
+    const cell = document.createElement('div');
+    cell.className = 'mem-cell';
+    cell.textContent = Math.random()>0.5? Math.floor(Math.random()*256).toString(16).padStart(2,'0') : Math.floor(Math.random()*256);
+    cell.dataset.idx = i;
+    memGrid.appendChild(cell);
+    if(aliveIndices.has(i)) memAnswer.push(i.toString());
+    cell.addEventListener('click', ()=>{
+      cell.classList.toggle('selected');
+      checkMemory();
+    });
+  }
+}
+function checkMemory(){
+  const selected = Array.from(memGrid.querySelectorAll('.mem-cell.selected')).map(e=>e.dataset.idx);
+  const aliveCount = memAnswer.length;
+  if(selected.length === aliveCount && selected.every(s=>memAnswer.includes(s))){
+    // win
+    logTerminal('MEMORY: ping -> OK. All live bytes found.');
+    progress.mem = true; saveProgress();
+    Array.from(memGrid.children).forEach(c=>c.classList.add('correct'));
+    memGrid.querySelectorAll('.mem-cell.selected').forEach(c=>c.style.transform='scale(1.03)');
+  } else {
+    termStatus.textContent = `memory: ${selected.length}/${aliveCount}`;
+  }
+}
+setupMemory();
+
+const switchRow = overlay.querySelector('#switch-row');
+let targetSwitches = [];
+function setupSwitches(){
+  switchRow.innerHTML = '';
+  targetSwitches = [];
+  const n = 6;
+  for(let i=0;i<n;i++){
+    const s = document.createElement('div');
+    s.className='switch';
+    s.textContent='0';
+    s.dataset.state='0';
+    s.addEventListener('click', ()=>{
+      const st = s.dataset.state === '0' ? '1' : '0';
+      s.dataset.state = st;
+      s.classList.toggle('on', st==='1');
+      s.textContent = st;
+      checkSwitches();
+    });
+    switchRow.appendChild(s);
+  }
+  for(let i=0;i<n;i++) targetSwitches.push(Math.random()>0.5? '1' : '0');
+  logTerminal('DIP: The target pattern has been set. Try to guess the combination.');
+}
+function checkSwitches(){
+  const states = Array.from(switchRow.children).map(s=>s.dataset.state);
+  if(states.join('') === targetSwitches.join('')){
+    logTerminal('DIP: switches -> MATCH. Integrity ok.');
+    progress.switch = true; saveProgress();
+    Array.from(switchRow.children).forEach(s=> s.classList.add('correct'));
+  } else {
+    termStatus.textContent = 'dip: testing...';
+  }
+}
+setupSwitches();
+
+const bootDisplay = overlay.querySelector('#boot-seq-display');
+const bootInput = overlay.querySelector('#boot-input');
+let bootSeq = '';
+function generateBootSeq(){
+  const pool = ['A','B','C','1','2','3','!','@'];
+  bootSeq = Array.from({length:5}, ()=> pool[Math.floor(Math.random()*pool.length)]).join('');
+  bootDisplay.textContent = bootSeq.split('').join(' ');
+}
+generateBootSeq();
+
+overlay.querySelector('#check-boot').addEventListener('click', ()=>{
+  const val = bootInput.value.trim().toUpperCase();
+  if(!val) return;
+  if(val === bootSeq){
+    logTerminal('BOOT SEQ: OK → Sequence accepted.');
+    progress.boot = true; saveProgress();
+    bootDisplay.textContent = 'OK ✓';
+  } else {
+    logTerminal('BOOT SEQ: mismatch — trying to synchronize...');
+    if(val.length === bootSeq.length){
+      termStatus.textContent = 'boot: mismatch';
+    } else {
+      termStatus.textContent = `boot: length ${val.length}/${bootSeq.length}`;
+    }
+  }
+});
+
+overlay.querySelector('#start-seq').addEventListener('click', async ()=>{
+  termStatus.textContent = 'running self-test...';
+  logTerminal('>>> INIT BOOT CHECK');
+  await delay(400);
+  logTerminal('CPU: nominals... OK');
+  await delay(300);
+  logTerminal('RAM: quick ping');
+  await delay(300);
+  // flash random memory
+  for(let i=0;i<3;i++){
+    terminalLastLine(`RAM ping ${i+1}/3`);
+    await delay(220);
+  }
+  logTerminal('Peripherals: DIP, MEMORY, SEQ are available.');
+  termStatus.textContent = 'tests ready';
+});
+
+function delay(ms){ return new Promise(r=>setTimeout(r, ms)); }
+function terminalLastLine(text){
+  const p = document.createElement('div');
+  p.textContent = text;
+  terminal.appendChild(p);
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+(function intro(){
+  const art = [
+    "  ______  _____ _____ _____  ",
+    " |  ____|/ ____|_   _|  __ \\ ",
+    " | |__  | (___   | | | |__) |",
+    " |  __|  \\___ \\  | | |  _  / ",
+    " | |____ ____) |_| |_| | \\ \\ ",
+    " |______|_____/|_____|_|  \\_\\",
+    "",
+    "EST-BOOT v0.9 initializing...",
+    "Detecting modules: [ok] [ok] [ok]",
+    "Type the challenges to unlock the core."
+  ];
+  art.forEach((l, i)=> setTimeout(()=> logTerminal(l), i*120));
+})();
+
+saveProgress();
+updateBadge();
+
+overlay.addEventListener('dblclick', (e)=> {
+  const target = e.target;
+  if(target.classList.contains('terminal') || target.id==='egg-close') return;
+  setupMemory(); setupSwitches(); generateBootSeq();
+  logTerminal('DEV: quick-reset of mini-games (double click).');
+});
+
+document.addEventListener('keydown', function escClose(e){
+  if(e.key === 'Escape'){ if(document.body.contains(overlay)) document.body.removeChild(overlay); document.removeEventListener('keydown', escClose); }
+});
+
+function cheerIfComplete(){
+  const done = [progress.mem, progress.switch, progress.boot].every(Boolean);
+  if(done){
+    const header = overlay.querySelector('.egg-header');
+    header.animate([{transform:'scale(1)'},{transform:'scale(1.02)'},{transform:'scale(1)'}], {duration:900, iterations:3});
+    logTerminal('*** ALL SYSTEMS GREEN — Boot sequence complete. Enjoy your secret mode! ***');
+  }
+}
+saveProgress();
+cheerIfComplete();
+
+window.addEventListener('storage', (e)=> {
+  if(e.key === KEY) {
+    progress = JSON.parse(e.newValue || '{"mem":false,"switch":false,"boot":false}');
+    updateBadge();
+  }
+});
+}
+</script>
+    <script>
+let clickCount = 0;
+let clickTimer = null;
+const unfiLogo = document.getElementById('unfiLogo');
+
+unfiLogo.addEventListener('click', () => {
+  clickCount++;
+  clearTimeout(clickTimer);
+  clickTimer = setTimeout(() => clickCount = 0, 1200);
+  if (clickCount >= 5) {
+    window.open('https://unfi.pp.ua/?est-egg=1');
+    clickCount = 0;
+  }
+});
+
+const texts = ['Arduino', 'Raspberry Pi', 'ESP32', 'ESP8266', 'Phone', 'PC'];
+let currentIndex = 0;
+const rotatingTextElement = document.getElementById('rotatingText');
+
+function rotateText() {
+  rotatingTextElement.classList.remove('slideUp');
+  void rotatingTextElement.offsetWidth;
+  currentIndex = (currentIndex + 1) % texts.length;
+  rotatingTextElement.textContent = texts[currentIndex];
+  rotatingTextElement.classList.add('slideUp');
+}
+
+setInterval(rotateText, 2500);
+</script>
 </body>
 </html>
