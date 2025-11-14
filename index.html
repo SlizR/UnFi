@@ -370,33 +370,23 @@
 }
 
 .shimmer-small {
-  position: relative;
-  color: #fff;
   display: inline-block;
-  overflow: hidden;
-  font-weight: 500;
-}
-
-.shimmer-small::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
   background: linear-gradient(
-    120deg,
-    rgba(255,255,255,0) 0%,
-    rgba(255,255,255,0.7) 50%,
-    rgba(255,255,255,0) 100%
+    90deg,
+    #ffffff 0%,
+    #dcdcdc 50%,
+    #ffffff 100%
   );
-  transform: skewX(-20deg);
-  animation: shimmerMove 2s infinite;
+  background-size: 200%;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: textShimmer 3s ease-in-out infinite;
 }
 
-@keyframes shimmerMove {
-  0% { left: -100%; }
-  100% { left: 100%; }
+@keyframes textShimmer {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 0%; }
+  100% { background-position: 0% 0%; }
 }
     </style>
 </head>
@@ -504,7 +494,7 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 Sliz® | UnFi™ | Version 356</p>
+        <p>&copy; 2025 Sliz® | UnFi™ | Version 357.15</p>
         <p style="margin-top: 10px;">
             <a href="https://unfi.pp.ua" style="color: #fff; text-decoration: none; opacity: 0.8;">
                 Website
@@ -899,45 +889,45 @@ setInterval(rotateText, 2500);
 const unfiStructure = {
   "Arduino": {
     "Uno": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Uno/boot.ino"
     },
     "Nano": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Nano/boot.ino"
     },
     "Mega": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Mega/boot.ino"
     },
     "Leonardo": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Leonardo/boot.ino"
     },
     "Due": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Due/boot.ino"
     },
     "Micro": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Micro/boot.ino"
     },
     "Pro_Mini": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Pro_Mini/boot.ino"
     },
     "MKR_WiFi_1010": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/MKR_WiFi_1010/boot.ino"
     },
     "Esplora": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Esplora/boot.ino"
     },
     "Yun": {
-      "boot.ino": ""
+      "boot.ino": "/Arduino/Yun/boot.ino"
     }
   },
   "ESP": {
     "ESP32": {
       "WROOM": {
-        "boot.ino": ""
+        "boot.ino": "/ESP/ESP32/WROOM/boot.ino"
       }
     },
     "ESP8266": {
       "NodeMCU": {
-        "boot.ino": ""
+        "boot.ino": "/ESP/ESP8266/NodeMCU/boot.ino"
       }
     }
   }
@@ -948,39 +938,59 @@ const fileContent = document.getElementById('file-content');
 const copyBtn = document.getElementById('copy-btn');
 
 function renderTree(structure, container) {
-  container.innerHTML = '';
   Object.keys(structure).forEach(key => {
-    const item = structure[key];
-    const div = document.createElement('div');
-    div.style.marginLeft = '15px';
-    div.style.cursor = 'pointer';
+    const value = structure[key];
 
-    if(typeof item === 'string') {
-      div.textContent = key;
-      div.style.padding = '3px 8px';
-      div.style.borderRadius = '6px';
-      div.style.transition = 'all 0.2s';
-      div.addEventListener('mouseover', ()=> div.style.background = 'rgba(255,255,255,0.1)');
-      div.addEventListener('mouseout', ()=> div.style.background = 'transparent');
-      div.addEventListener('click', ()=> fileContent.textContent = item);
-    } else {
-      div.textContent = '📁 ' + key;
-      div.style.fontWeight = '600';
-      const childContainer = document.createElement('div');
-      childContainer.style.display = 'none';
-      renderTree(item, childContainer);
-      div.addEventListener('click', ()=> {
-        childContainer.style.display = childContainer.style.display === 'none' ? 'block' : 'none';
+    const item = document.createElement('div');
+    item.style.cursor = "pointer";
+    item.style.margin = "5px 0";
+
+    if (typeof value === "string") {
+      item.textContent = key;
+      item.style.padding = "3px 6px";
+
+      item.addEventListener('click', e => {
+        e.stopPropagation();
+        loadFile(value);
       });
-      div.appendChild(childContainer);
+
+      container.appendChild(item);
+      return;
     }
 
-    container.appendChild(div);
+    item.textContent = "📁 " + key;
+    item.style.fontWeight = "600";
+
+    const children = document.createElement('div');
+    children.style.display = "none";
+    children.style.marginLeft = "18px";
+
+    item.addEventListener('click', e => {
+      e.stopPropagation();
+      children.style.display = children.style.display === "none" ? "block" : "none";
+    });
+
+    renderTree(value, children);
+
+    item.appendChild(children);
+    container.appendChild(item);
   });
 }
 
+function loadFile(path) {
+  fetch(path)
+    .then(res => res.text())
+    .then(text => {
+      fileContent.textContent = text;
+    })
+    .catch(() => {
+      fileContent.textContent = "// error loading: " + path;
+    });
+}
+
 copyBtn.addEventListener('click', () => {
-  if(fileContent.textContent) navigator.clipboard.writeText(fileContent.textContent);
+  if (fileContent.textContent)
+    navigator.clipboard.writeText(fileContent.textContent);
 });
 
 renderTree(unfiStructure, fileBrowser);
