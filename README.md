@@ -1,4 +1,4 @@
-![UnFi Photo](UnFi.png)
+![UnFi Photo](Assets/photo.png)
 
 # UnFi 🚀
 
