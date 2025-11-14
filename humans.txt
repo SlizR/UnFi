@@ -1,0 +1,15 @@
+/* TEAM */
+Developers: Sliz®
+Site: https://unfi.pp.ua
+Company: https://github.com/SlizR/
+Github: https://github.com/SlizR/UnFi/
+Wiki: https://github.com/SlizR/UnFi/wiki/
+Contact: markd.voznyuk@gmail.com
+
+/* THANKS */
+Inspired by: B-HD®
+
+/* TECHNOLOGY */
+Language: HTML5, CSS3, JS
+Frameworks: Tailwind, Astro/React
+Server: Claudflare
