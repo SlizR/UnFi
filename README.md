@@ -1,5 +1,7 @@
 ![UnFi Photo](Assets/photo.png)
 
+---
+
 # UnFi 🚀
 
 **UnFi** — your next-generation bootloader and system logger, built for creators, engineers, and tinkerers who demand *speed, reliability, and style*.  
