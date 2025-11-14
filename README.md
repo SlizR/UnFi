@@ -17,7 +17,7 @@ It’s fast, compact, and optimized for instant startup, diagnostics, and loggin
 Built for:
 - **Arduino Boards** — Uno, Nano, Mega, Leonardo, Due, and more  
 - **ESP Series** — ESP32 (WROOM, S3, etc.) and ESP8266 (NodeMCU, Wemos D1 Mini, etc.)  
-- **Future Platforms** — Raspberry Pi Pico, STM32, and custom SoCs (in development)  
+- **Future Platforms** — Raspberry Pi Pico, Phone and PC 
 
 UnFi ensures your device starts fast, verifies its environment, logs every action, and continues to run flawlessly — all with a minimal flash footprint.
 
