@@ -46,7 +46,6 @@ You can either:
 - Clone it using Git:  
   ```bash
   git clone https://github.com/SlizR/UnFi.git
-```
 
 * Or download the ZIP directly from GitHub and extract it.
 
